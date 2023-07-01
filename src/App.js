@@ -1,24 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import GridLayout from "react-grid-layout";
 
 function App() {
+  const [prevLayout, setPrevLayout] = useState([]);
+  const [layout, setLayout] = useState([
+    { i: "child", x: 0, y: 0, h: 2, w: 2 },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GridLayout
+        width={1000}
+        cols={6}
+        maxRows={6}
+        rowHeight={40}
+        onResizeStop={(newLayout) => {
+          setPrevLayout(() => layout);
+          setLayout(() => newLayout);
+        }}
+        onDragStop={(newLayout) => {
+          setPrevLayout(() => layout);
+          setLayout(() => newLayout);
+        }}
+      >
+        {layout.map((item) => (
+          <div key={item.i} data-grid={item}>
+            ITEM
+          </div>
+        ))}
+      </GridLayout>
+      <div>Prev Layout:</div>
+      <div>{JSON.stringify(prevLayout)}</div>
+      <div>Current Layout:</div>
+      <div>{JSON.stringify(layout)}</div>
+      <button
+        onClick={() => {
+          setLayout(prevLayout);
+        }}
+      >
+        SET TO PREV
+      </button>
+    </>
   );
 }
 
